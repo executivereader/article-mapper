@@ -213,10 +213,11 @@ def process_reuters_articles(reuters_articles, client):
         if article['newsMessage']['itemSet']['newsItem']['contentSet']['inlineXML']['html']['body']['p'] is not None:
             for paragraph in article['newsMessage']['itemSet']['newsItem']['contentSet']['inlineXML']['html']['body']['p']:
                 cleaned_paragraph = ""
-                for i in paragraph:
-                    if i is not None:
-                        if ord(i) < 128:
-                            cleaned_paragraph = cleaned_paragraph + i
+                if paragraph is not None:
+                    for i in paragraph:
+                        if i is not None:
+                            if ord(i) < 128:
+                                cleaned_paragraph = cleaned_paragraph + i
                 output["content"] = output["content"] + str(cleaned_paragraph).replace("\n"," ")
         output["source"] = "Thomson Reuters"
         output["geos"] = ""
