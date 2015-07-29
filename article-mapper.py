@@ -2,11 +2,13 @@ from update_replica_set import start_mongo_client
 from datetime import datetime
 from time import sleep
 
+MIN_PRIORITY = 5
+
 def update_articles(output, client):
         try:
             to_update = client.production.articles.find({"id": output["id"]})[0]
         except Exception:
-            if output["priority"] > 1:
+            if output["priority"] > MIN_PRIORITY:
                 try:
                     client.production.articles.insert(output)
                 except Exception:
@@ -14,7 +16,7 @@ def update_articles(output, client):
         else:
             output["saved"] = to_update["saved"]
             output["unseen"] = to_update["unseen"]
-        if output["priority"] > 1:
+        if output["priority"] > MIN_PRIORITY:
             try:
                 client.production.articles.replace_one({"id": output["id"]},output,upsert=True)
             except Exception:
@@ -198,5 +200,5 @@ if __name__ == "__main__":
         process_dataminr_events(raw_events, client)
         print "Processing news articles"
         process_news_events(news_events, client)
-        client.production.articles.delete_many({"priority": {"$lt": 5} })
+        client.production.articles.delete_many({"priority": {"$lt": MIN_PRIORITY} })
         sleep(5)
