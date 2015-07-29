@@ -209,8 +209,8 @@ def process_reuters_articles(reuters_articles, client):
         output["pubDate"] = datetime.strptime(article['newsMessage']['itemSet']['newsItem']['itemMeta']['versionCreated'], "%Y-%m-%dT%H:%M:%S.000Z")
         print output["pubDate"]
         output["poster"] = ""
-        output["movies"] = ""
-        output["images"] = ""
+        output["movies"] = []
+        output["images"] = []
         output["title"] = article['newsMessage']['itemSet']['newsItem']['contentMeta']['headline']
         output["content"] = u""
         if article['newsMessage']['itemSet']['newsItem']['contentSet']['inlineXML']['html']['body']['p'] is not None:
