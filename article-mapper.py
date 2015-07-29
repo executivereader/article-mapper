@@ -209,7 +209,9 @@ def process_reuters_articles(reuters_articles, client):
         output["movies"] = ""
         output["images"] = ""
         output["title"] = article['newsMessage']['itemSet']['newsItem']['contentMeta']['slugline']
-        output["content"] = " ".join(article['newsMessage']['itemSet']['newsItem']['contentSet']['inlineXML']['html']['body']['p'])
+        for paragraph in article['newsMessage']['itemSet']['newsItem']['contentSet']['inlineXML']['html']['body']['p']:
+            if paragraph is not None:
+                output["content"] = output["content"] + str(paragraph)
         output["source"] = "Thomson Reuters"
         output["geos"] = ""
         output["saved"] = "false"
@@ -224,7 +226,7 @@ if __name__ == "__main__":
     while 1:
         raw_events = client.dataminr.articles.find().sort("eventTime", -1).limit(10)
         news_events = client.raw_articles.news.find({"pubDate": {"$ne": "None"}}).sort("pubDate", -1).limit(10)
-        reuters_events = client.tr.articles.find({"newsMessage.itemSet.newsItem.contentSet.inlineXML.html.body.p": {"$exists": True}}).sort("newsMessage.itemSet.newsItem.itemMeta.versionCreated", -1).limit(10000)
+        reuters_events = client.tr.articles.find({"newsMessage.itemSet.newsItem.itemMeta.versionCreated": {"$exists": True}}).sort("newsMessage.itemSet.newsItem.itemMeta.versionCreated", -1).limit(10000)
         print "Processing Dataminr articles"
         process_dataminr_events(raw_events, client)
         print "Processing news articles"
