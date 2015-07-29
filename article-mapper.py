@@ -2,7 +2,7 @@ from update_replica_set import start_mongo_client
 from datetime import datetime
 from time import sleep
 
-def update_articles(output):
+def update_articles(output, client):
         try:
             to_update = client.production.articles.find({"id": output["id"]})[0]
         except Exception:
@@ -21,7 +21,7 @@ def update_articles(output):
                 pass
 
 
-def process_dataminr_events(raw_events):
+def process_dataminr_events(raw_events, client):
     for event in raw_events:
         output = {}
         output["priority"] = 0
@@ -126,7 +126,7 @@ def is_a_in_b(a,b):
             return True
     return False
 
-def process_news_events(news_events):
+def process_news_events(news_events, client):
     for event in news_events:
         output = {}
         output["priority"] = 1
@@ -180,7 +180,7 @@ def process_news_events(news_events):
         if output["pubDate"] > datetime.now():
             output["priority"] = 0
         print "News event at " + str(output["pubDate"]) + ", priority " + str(output["priority"])
-        update_articles(output)
+        update_articles(output, client)
 
 if __name__ == "__main__":
     client = start_mongo_client()
@@ -188,8 +188,8 @@ if __name__ == "__main__":
         raw_events = client.dataminr.events.find().sort("eventTime", -1).limit(10000)
         news_events = client.raw_articles.news.find({"pubDate": {"$ne": "None"}}).sort("pubDate", -1).limit(2000)
         print "Processing Dataminr articles"
-        process_dataminr_events(raw_events)
+        process_dataminr_events(raw_events, client)
         print "Processing news articles"
-        process_news_events(news_events)
+        process_news_events(news_events, client)
         client.production.articles.delete_many({"priority": {"$lt": 1} })
         sleep(5)
