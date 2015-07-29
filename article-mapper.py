@@ -225,7 +225,7 @@ def process_reuters_articles(reuters_articles, client):
                                 cleaned_paragrah = cleaned_paragraph + " "
                 output["content"] = output["content"] + " " + str(cleaned_paragraph).replace("\n"," ")
         output["source"] = "Thomson Reuters"
-        output["read"] = "false"
+        output["read"] = int(article['newsMessage']['itemSet']['newsItem']['contentSet']['inlineXML']['@wordcount']) / 200 + 1
         output["topics"] = []
         output["geos"] = ""
         output["saved"] = "false"
@@ -247,6 +247,7 @@ def process_reuters_articles(reuters_articles, client):
             output["priority"] = output["priority"] + 1
         if is_a_in_b(terrorism_words,output["topics"]):
             output["priority"] = output["priority"] + 2
+        output["priority"] = 2 * float(output["priority"] / article['newsMessage']['itemSet']['newsItem']['contentMeta']['urgency'])
         output["priority"] = adjust_priority_by_time(output["priority"], output["pubDate"])
         output["priority"] = output["priority"] * REUTERS_MULTIPLIER
         print "Reuters event at " + str(output["pubDate"]) + ", priority " + str(output["priority"])
