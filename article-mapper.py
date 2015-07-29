@@ -74,7 +74,7 @@ def process_dataminr_events(raw_events, client):
         output["rawHTML"] = tweet
         output["read"] = 1
         output["topics"] = event["categories"]
-        if "toronto" in output["content"] and "traffic" in output["content"]:
+        if "toronto" in output["content"].lower() and "traffic" in output["content"].lower():
             output["priority"] = output["priority"] - 20
         if "Crime - Criminal Activity" in output["topics"]:
             output["priority"] = output["priority"] + 1
