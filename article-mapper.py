@@ -221,7 +221,7 @@ def process_reuters_articles(reuters_articles, client):
                                 cleaned_paragraph = cleaned_paragraph + i
                             else:
                                 cleaned_paragrah = cleaned_paragraph + " "
-                output["content"] = output["content"] + str(cleaned_paragraph).replace("\n"," ")
+                output["content"] = output["content"] + " " + str(cleaned_paragraph).replace("\n"," ")
         output["source"] = "Thomson Reuters"
         output["read"] = "false"
         output["topics"] = []
