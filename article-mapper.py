@@ -206,9 +206,10 @@ def process_reuters_articles(reuters_articles, client):
 if __name__ == "__main__":
     client = start_mongo_client()
     while 1:
-        raw_events = client.dataminr.articles.find().sort("eventTime", -1).limit(10000)
-        news_events = client.raw_articles.news.find({"pubDate": {"$ne": "None"}}).sort("pubDate", -1).limit(2000)
-        reuters_events = client.tr.articles.find().sort("newsMessage.itemSet.newsItem.versionCreated", -1).limit(10000)
+        raw_events = client.dataminr.articles.find().sort("eventTime", -1).limit(10)
+        news_events = client.raw_articles.news.find({"pubDate": {"$ne": "None"}}).sort("pubDate", -1).limit(10)
+        reuters_events = client.tr.articles.find({"newsMessage.itemSet.newsItem.versionCreated": {$exists: true}}).sort("newsMessage.itemSet.newsItem.versionCreated", -1).limit(10000)
+        print "Found " + str(len(reuters_events)) + " Reuters articles"
         print "Processing Dataminr articles"
         process_dataminr_events(raw_events, client)
         print "Processing news articles"
