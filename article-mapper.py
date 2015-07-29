@@ -208,7 +208,7 @@ if __name__ == "__main__":
     while 1:
         raw_events = client.dataminr.articles.find().sort("eventTime", -1).limit(10)
         news_events = client.raw_articles.news.find({"pubDate": {"$ne": "None"}}).sort("pubDate", -1).limit(10)
-        reuters_events = client.tr.articles.find({"newsMessage.itemSet.newsItem.versionCreated": {$exists: true}}).sort("newsMessage.itemSet.newsItem.versionCreated", -1).limit(10000)
+        reuters_events = client.tr.articles.find({"newsMessage.itemSet.newsItem.versionCreated": {"$exists": True}}).sort("newsMessage.itemSet.newsItem.versionCreated", -1).limit(10000)
         print "Found " + str(len(reuters_events)) + " Reuters articles"
         print "Processing Dataminr articles"
         process_dataminr_events(raw_events, client)
