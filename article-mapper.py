@@ -89,6 +89,14 @@ def process_dataminr_events(raw_events, client):
                                }
                              }).count() > 0:
                     output["priority"] = output["priority"] + 5
+                    if "Crime - Criminal Activity" in output["topics"]:
+                        output["priority"] = output["priority"] + 5
+                    if "Conflicts & Violence" in output["topics"]:
+                        output["priority"] = output["priority"] + 10
+                    if "Riots & Protests" in output["topics"]:
+                        output["priority"] = output["priority"] + 10
+                    if "Disasters & Weather - Natural Disasters" in output["topics"]:
+                        output["priority"] = output["priority"] + 5
                 if client.locations.embassies.find({
                              "coords": {
                                "$near": {
@@ -102,13 +110,13 @@ def process_dataminr_events(raw_events, client):
                              }).count() > 0:
                     output["priority"] = output["priority"] + 20
                     if "Crime - Criminal Activity" in output["topics"]:
-                        output["priority"] = output["priority"] + 10
+                        output["priority"] = output["priority"] + 20
                     if "Conflicts & Violence" in output["topics"]:
-                        output["priority"] = output["priority"] + 30
+                        output["priority"] = output["priority"] + 100
                     if "Riots & Protests" in output["topics"]:
-                        output["priority"] = output["priority"] + 30
+                        output["priority"] = output["priority"] + 100
                     if "Disasters & Weather - Natural Disasters" in output["topics"]:
-                        output["priority"] = output["priority"] + 5
+                        output["priority"] = output["priority"] + 10
         output["saved"] = "false"
         output["unseen"] = "true"
         output["story"] = []
