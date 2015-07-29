@@ -6,5 +6,6 @@ cd /home/ubuntu/
 sudo git clone https://github.com/executivereader/mongo-startup.git
 sudo git clone https://github.com/executivereader/article-mapper.git
 sudo cp /home/ubuntu/mongo-startup/connection_string.txt /home/ubuntu/article-mapper/connection_string.txt
+sudo cp /home/ubuntu/mongo-startup/update_replica_set.py /home/ubuntu/article-mapper/update_replica_set.py
 cd /home/ubuntu/article-mapper
 sudo python article_mapper.py
