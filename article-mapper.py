@@ -208,7 +208,7 @@ def process_reuters_articles(reuters_articles, client):
         output["priority"] = 0
         output["pubDate"] = datetime.strptime(article['newsMessage']['itemSet']['newsItem']['itemMeta']['versionCreated'], "%Y-%m-%dT%H:%M:%S.000Z")
         print output["pubDate"]
-        output["poster"] = "https://lh3.googleusercontent.com/-OCHES26nlos/AAAAAAAAAAI/AAAAAAAAAWA/bSy-aNy7dUM/s46-c-k-no/photo.jpg"
+        output["poster"] = "http://s3.amazonaws.com/mogulinc/listings/image_urls/000/000/447/original/ThomsonReuters.png?1402685587"
         output["movies"] = []
         output["images"] = []
         output["title"] = article['newsMessage']['itemSet']['newsItem']['contentMeta']['headline']
