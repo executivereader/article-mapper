@@ -179,27 +179,28 @@ def process_news_events(news_events, client):
             pass
         output["story"] = []
         output["id"] = event["_id"]
-        other_search_words = []
+        other_search_words = [" CIA "," CIA."," CIA,"," CIA;","C.I.A."]
         instability_words = ["protest","demonstration"]
         terrorism_words = ["terrorism","terrorist","explosion","bombing"," ied", "i.e.d.","drone","strike"]
         if is_a_in_b(other_search_words,output["content"]):
-            output["priority"] = output["priority"] + 4
+            output["priority"] = output["priority"] + 10
         if is_a_in_b(instability_words,output["content"]):
-            output["priority"] = output["priority"] + 1
+            output["priority"] = output["priority"] + 2
         if is_a_in_b(terrorism_words,output["content"]):
-            output["priority"] = output["priority"] + 2
-        if is_a_in_b(other_search_words,output["topics"]):
             output["priority"] = output["priority"] + 4
+        if is_a_in_b(other_search_words,output["topics"]):
+            output["priority"] = output["priority"] + 10
         if is_a_in_b(instability_words,output["topics"]):
-            output["priority"] = output["priority"] + 1
-        if is_a_in_b(terrorism_words,output["topics"]):
             output["priority"] = output["priority"] + 2
+        if is_a_in_b(terrorism_words,output["topics"]):
+            output["priority"] = output["priority"] + 4
         output["priority"] = adjust_priority_by_time(output["priority"], output["pubDate"])
         output["priority"] = output["priority"] * NEWS_MULTIPLIER
         print "News event at " + str(output["pubDate"]) + ", priority " + str(output["priority"])
         update_articles(output, client)
 
 def process_reuters_articles(reuters_articles, client):
+    search_terms = []
     for article in reuters_articles:
         output = {}
         output["priority"] = 0
@@ -222,13 +223,32 @@ def process_reuters_articles(reuters_articles, client):
                                 cleaned_paragrah = cleaned_paragraph + " "
                 output["content"] = output["content"] + str(cleaned_paragraph).replace("\n"," ")
         output["source"] = "Thomson Reuters"
+        output["read"] = "false"
+        output["topics"] = []
         output["geos"] = ""
         output["saved"] = "false"
         output["unseen"] = "true"
         output["story"] = []
         output["id"] = article["_id"]
-        print output
-        #update_articles(output, client)
+        other_search_words = [" CIA "," CIA."," CIA,"," CIA;","C.I.A."]
+        instability_words = ["protest","demonstration"]
+        terrorism_words = ["terrorism","terrorist","explosion","bombing"," ied", "i.e.d.","drone","strike"]
+        if is_a_in_b(other_search_words,output["content"]):
+            output["priority"] = output["priority"] + 4
+        if is_a_in_b(instability_words,output["content"]):
+            output["priority"] = output["priority"] + 1
+        if is_a_in_b(terrorism_words,output["content"]):
+            output["priority"] = output["priority"] + 2
+        if is_a_in_b(other_search_words,output["topics"]):
+            output["priority"] = output["priority"] + 4
+        if is_a_in_b(instability_words,output["topics"]):
+            output["priority"] = output["priority"] + 1
+        if is_a_in_b(terrorism_words,output["topics"]):
+            output["priority"] = output["priority"] + 2
+        output["priority"] = adjust_priority_by_time(output["priority"], output["pubDate"])
+        output["priority"] = output["priority"] * REUTERS_MULTIPLIER
+        print "Reuters event at " + str(output["pubDate"]) + ", priority " + str(output["priority"])
+        update_articles(output, client)
 
 if __name__ == "__main__":
     client = start_mongo_client()
