@@ -205,7 +205,19 @@ def process_reuters_articles(reuters_articles, client):
         output["priority"] = 0
         output["pubDate"] = datetime.strptime(article['newsMessage']['itemSet']['newsItem']['itemMeta']['versionCreated'], "%Y-%m-%dT%H:%M:%S.000Z")
         print output["pubDate"]
-        
+        output["poster"] = ""
+        output["movies"] = ""
+        output["images"] = ""
+        output["title"] = article['newsMessage']['itemSet']['newsItem']['contentMeta']['slugline']
+        output["content"] = " ".join(article['newsMessage']['itemSet']['newsItem']['contentSet']['inlineXML']['html']['body']['p'])
+        output["source"] = "Thomson Reuters"
+        output["geos"] = ""
+        output["saved"] = "false"
+        output["unseen"] = "true"
+        output["story"] = []
+        output["id"] = article["_id"]
+        print output
+        #update_articles(output, client)
 
 if __name__ == "__main__":
     client = start_mongo_client()
