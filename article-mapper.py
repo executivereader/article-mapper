@@ -69,7 +69,7 @@ def process_dataminr_events(raw_events, client):
         if "Disasters & Weather - Natural Disasters" in output["topics"]:
             output["priority"] = output["priority"] + 1
         if "Transportation - Traffic & Roadways" in output["topics"]:
-            output["priority"] = output["priority"] - 5
+            output["priority"] = output["priority"] - 20
         output["geos"] = []
         if "eventLocation" in event.keys():
             if "coordinates" in event["eventLocation"].keys():
