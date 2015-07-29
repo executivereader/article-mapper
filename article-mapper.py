@@ -46,8 +46,7 @@ def process_dataminr_events(raw_events, client):
         output["content"] = tweet["text"]
         if "translatedText" in tweet.keys():
             output["content"] = tweet["translatedText"]
-        if " cia " in output["content"].lower() or " cia." in output["content"].lower() or " cia," in output["content"].lower() or " cia;" in output["content"].lower() or "@cia" in
-output["content"].lower():
+        if " cia " in output["content"].lower() or " cia." in output["content"].lower() or " cia," in output["content"].lower() or " cia;" in output["content"].lower() or "@cia" in output["content"].lower():
             output["priority"] = output["priority"] + 20
         if "description" in tweet["user"].keys() and "name" in tweet["user"].keys():
             output["summary"] = tweet["user"]["name"]  + ": " + tweet["user"]["description"]
