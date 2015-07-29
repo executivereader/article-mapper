@@ -36,12 +36,12 @@ def process_dataminr_events(raw_events, client):
                 if "expanded_url" in media.keys():
                     if "photo" in media["expanded_url"]:
                         output["images"].append(media["media_url_https"])
-                        output["priority"] = output["priority"] + 1
+                        output["priority"] = output["priority"] + 2
                         if output["poster"] == "":
                             output["poster"] = media["media_url_https"]
                     if "video" in media["expanded_url"]:
                         output["movies"].append(media["media_url_https"])
-                        output["priority"] = output["priority"] + 1
+                        output["priority"] = output["priority"] + 2
         output["title"] = tweet["user"]["screen_name"]
         output["content"] = tweet["text"]
         if "translatedText" in tweet.keys():
@@ -69,7 +69,7 @@ def process_dataminr_events(raw_events, client):
         if "Disasters & Weather - Natural Disasters" in output["topics"]:
             output["priority"] = output["priority"] + 1
         if "Transportation - Traffic & Roadways" in output["topics"]:
-            output["priority"] = output["priority"] - 10
+            output["priority"] = output["priority"] - 5
         output["geos"] = []
         if "eventLocation" in event.keys():
             if "coordinates" in event["eventLocation"].keys():
@@ -198,5 +198,5 @@ if __name__ == "__main__":
         process_dataminr_events(raw_events, client)
         print "Processing news articles"
         process_news_events(news_events, client)
-        client.production.articles.delete_many({"priority": {"$lt": 1} })
+        client.production.articles.delete_many({"priority": {"$lt": 5} })
         sleep(5)
