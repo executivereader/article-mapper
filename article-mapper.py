@@ -10,7 +10,9 @@ RECORDEDFUTURE_MULTIPLIER = 1
 MAXDIFF = 172800
 
 def adjust_priority_by_time(priority, datetime):
-    difference = datetime.now() - output["pubDate"]
+    if datetime > datetime.now():
+        return 0
+    difference = datetime.now() - datetime
     return priority * (MAXDIFF - difference.total_seconds()) * (MAXDIFF - difference.total_seconds())/(MAXDIFF * MAXDIFF)
 
 def update_articles(output, client):
@@ -131,8 +133,7 @@ def process_dataminr_events(raw_events, client):
         output["unseen"] = "true"
         output["story"] = []
         output["id"] = "tweet_" + str(output["rawHTML"]["id"])
-        difference = datetime.now() - output["pubDate"]
-        output["priority"] = output["priority"] * (MAXDIFF - difference.total_seconds()) * (MAXDIFF - difference.total_seconds())/(MAXDIFF * MAXDIFF)
+        output["priority"] = adjust_priority_by_time(output["priority"], output["pubDate"])
         output["priority"] = output["priority"] * DATAMINR_MULTIPLIER
         print "Dataminr event at " + str(output["pubDate"]) + ", priority " + str(output["priority"])
         update_articles(output, client)
@@ -191,11 +192,8 @@ def process_news_events(news_events, client):
             output["priority"] = output["priority"] + 1
         if is_a_in_b(terrorism_words,output["topics"]):
             output["priority"] = output["priority"] + 2
-        difference = datetime.now() - output["pubDate"]
-        maxdiff = 172800.0
-        output["priority"] = output["priority"] * (maxdiff - difference.total_seconds())/maxdiff
-        if output["pubDate"] > datetime.now():
-            output["priority"] = 0
+        output["priority"] = adjust_priority_by_time(output["priority"], output["pubDate"])
+        output["priority"] = output["priority"] * NEWS_MULTIPLIER
         print "News event at " + str(output["pubDate"]) + ", priority " + str(output["priority"])
         update_articles(output, client)
 
