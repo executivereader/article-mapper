@@ -218,6 +218,8 @@ def process_reuters_articles(reuters_articles, client):
                         if i is not None:
                             if ord(i) < 128:
                                 cleaned_paragraph = cleaned_paragraph + i
+                            else:
+                                cleaned_paragrah = cleaned_paragraph + " "
                 output["content"] = output["content"] + str(cleaned_paragraph).replace("\n"," ")
         output["source"] = "Thomson Reuters"
         output["geos"] = ""
