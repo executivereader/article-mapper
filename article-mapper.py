@@ -210,8 +210,8 @@ def process_reuters_articles(reuters_articles, client):
         output["images"] = ""
         output["title"] = article['newsMessage']['itemSet']['newsItem']['contentMeta']['slugline']
         output["content"] = u""
-        for paragraph in article['newsMessage']['itemSet']['newsItem']['contentSet']['inlineXML']['html']['body']['p']:
-            if paragraph is not None:
+        if article['newsMessage']['itemSet']['newsItem']['contentSet']['inlineXML']['html']['body']['p'] is not None:
+            for paragraph in article['newsMessage']['itemSet']['newsItem']['contentSet']['inlineXML']['html']['body']['p']:
                 cleaned_paragraph = ""
                 for i in paragraph:
                     if i is not None:
