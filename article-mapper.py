@@ -2,7 +2,7 @@ from update_replica_set import start_mongo_client
 from datetime import datetime
 from time import sleep
 
-MIN_PRIORITY = 5
+MIN_PRIORITY = 3
 
 def update_articles(output, client):
         try:
