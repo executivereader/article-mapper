@@ -184,7 +184,7 @@ def process_news_events(news_events, client):
 if __name__ == "__main__":
     client = start_mongo_client()
     while 1:
-        raw_events = client.dataminr.events.find().sort("eventTime", -1).limit(10000)
+        raw_events = client.dataminr.articles.find().sort("eventTime", -1).limit(10000)
         news_events = client.raw_articles.news.find({"pubDate": {"$ne": "None"}}).sort("pubDate", -1).limit(2000)
         print "Processing Dataminr articles"
         process_dataminr_events(raw_events, client)
