@@ -3,25 +3,33 @@ from datetime import datetime
 from time import sleep
 
 MIN_PRIORITY = 3
+DATAMINR_MULTIPLIER = 1
+NEWS_MULTIPLIER = 1
+REUTERS_MULTIPLIER = 1
+RECORDEDFUTURE_MULTIPLIER = 1
+MAXDIFF = 172800
+
+def adjust_priority_by_time(priority, datetime):
+    difference = datetime.now() - output["pubDate"]
+    return priority * (MAXDIFF - difference.total_seconds()) * (MAXDIFF - difference.total_seconds())/(MAXDIFF * MAXDIFF)
 
 def update_articles(output, client):
-        try:
-            to_update = client.production.articles.find({"id": output["id"]})[0]
-        except Exception:
-            if output["priority"] > MIN_PRIORITY:
-                try:
-                    client.production.articles.insert(output)
-                except Exception:
-                    pass
-        else:
-            output["saved"] = to_update["saved"]
-            output["unseen"] = to_update["unseen"]
+    try:
+        to_update = client.production.articles.find({"id": output["id"]})[0]
+    except Exception:
         if output["priority"] > MIN_PRIORITY:
             try:
-                client.production.articles.replace_one({"id": output["id"]},output,upsert=True)
+                client.production.articles.insert(output)
             except Exception:
                 pass
-
+    else:
+        output["saved"] = to_update["saved"]
+        output["unseen"] = to_update["unseen"]
+    if output["priority"] > MIN_PRIORITY:
+        try:
+            client.production.articles.replace_one({"id": output["id"]},output,upsert=True)
+        except Exception:
+            pass
 
 def process_dataminr_events(raw_events, client):
     for event in raw_events:
@@ -124,8 +132,8 @@ def process_dataminr_events(raw_events, client):
         output["story"] = []
         output["id"] = "tweet_" + str(output["rawHTML"]["id"])
         difference = datetime.now() - output["pubDate"]
-        maxdiff = 172800
-        output["priority"] = output["priority"] * (maxdiff - difference.total_seconds()) * (maxdiff - difference.total_seconds())/(maxdiff * maxdiff)
+        output["priority"] = output["priority"] * (MAXDIFF - difference.total_seconds()) * (MAXDIFF - difference.total_seconds())/(MAXDIFF * MAXDIFF)
+        output["priority"] = output["priority"] * DATAMINR_MULTIPLIER
         print "Dataminr event at " + str(output["pubDate"]) + ", priority " + str(output["priority"])
         update_articles(output, client)
 
@@ -190,6 +198,9 @@ def process_news_events(news_events, client):
             output["priority"] = 0
         print "News event at " + str(output["pubDate"]) + ", priority " + str(output["priority"])
         update_articles(output, client)
+
+def process_reuters_articles(reuters_articles, client):
+    print "blargh"
 
 if __name__ == "__main__":
     client = start_mongo_client()
