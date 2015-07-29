@@ -46,8 +46,8 @@ def process_dataminr_events(raw_events, client):
         output["content"] = tweet["text"]
         if "translatedText" in tweet.keys():
             output["content"] = tweet["translatedText"]
-        if " cia " in output["content"].lower() or " cia." in output["content"].lower() or " cia," in output["content"].lower() or " cia;" in output["content"].lower() or "@cia" in output["content"].lower():
-            output["priority"] = output["priority"] + 20
+        if " CIA " in output["content"] or " CIA." in output["content"] or " CIA," in output["content"] or " CIA;" in output["content"] or "@CIA" in output["content"] or "C.I.A." in output["content"]:
+            output["priority"] = output["priority"] + 50
         if "description" in tweet["user"].keys() and "name" in tweet["user"].keys():
             output["summary"] = tweet["user"]["name"]  + ": " + tweet["user"]["description"]
         elif "description" in tweet["user"].keys():
@@ -84,11 +84,11 @@ def process_dataminr_events(raw_events, client):
                                    "type": "Point",
                                    "coordinates": output["geos"]
                                    },
-                                 "$maxDistance": 5000
+                                 "$maxDistance": 10000
                                  }
                                }
                              }).count() > 0:
-                    output["priority"] = output["priority"] + 10
+                    output["priority"] = output["priority"] + 5
                 if client.locations.embassies.find({
                              "coords": {
                                "$near": {
@@ -96,7 +96,7 @@ def process_dataminr_events(raw_events, client):
                                    "type": "Point",
                                    "coordinates": output["geos"]
                                    },
-                                 "$maxDistance": 500
+                                 "$maxDistance": 1000
                                  }
                                }
                              }).count() > 0:
