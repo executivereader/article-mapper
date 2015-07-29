@@ -9,4 +9,4 @@ sudo cp /home/ubuntu/mongo-startup/connection_string.txt /home/ubuntu/article-ma
 sudo cp /home/ubuntu/mongo-startup/update_replica_set.py /home/ubuntu/article-mapper/update_replica_set.py
 cd /home/ubuntu/article-mapper
 sudo pip install pymongo
-sudo python article-mapper.py
+sudo screen -dm bash -c "sudo python article-mapper.py"
