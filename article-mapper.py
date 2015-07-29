@@ -84,7 +84,7 @@ def process_dataminr_events(raw_events, client):
                                    "type": "Point",
                                    "coordinates": output["geos"]
                                    },
-                                 "$maxDistance": 10000
+                                 "$maxDistance": 2000
                                  }
                                }
                              }).count() > 0:
@@ -96,7 +96,7 @@ def process_dataminr_events(raw_events, client):
                                    "type": "Point",
                                    "coordinates": output["geos"]
                                    },
-                                 "$maxDistance": 1000
+                                 "$maxDistance": 500
                                  }
                                }
                              }).count() > 0:
