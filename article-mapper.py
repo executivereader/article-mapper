@@ -201,8 +201,11 @@ def process_news_events(news_events, client):
 
 def process_reuters_articles(reuters_articles, client):
     for article in reuters_articles:
-        print article['newsMessage']['itemSet']['newsItem']['itemMeta']['versionCreated']
-        sleep(1)
+        output = {}
+        output["priority"] = 0
+        output["pubDate"] = datetime.strptime(article['newsMessage']['itemSet']['newsItem']['itemMeta']['versionCreated'], "%Y-%m-%dT%H:%M:%SZ")
+        print output["pubDate"]
+        
 
 if __name__ == "__main__":
     client = start_mongo_client()
