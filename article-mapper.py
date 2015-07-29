@@ -13,6 +13,8 @@ def adjust_priority_by_time(priority, datetime):
     if datetime > datetime.now():
         return 0
     difference = datetime.now() - datetime
+    if difference.total_seconds() > MAXDIFF:
+        return 0
     return priority * (MAXDIFF - difference.total_seconds()) * (MAXDIFF - difference.total_seconds())/(MAXDIFF * MAXDIFF)
 
 def update_articles(output, client):
