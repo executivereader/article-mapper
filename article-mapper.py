@@ -115,7 +115,7 @@ def process_dataminr_events(raw_events, client):
         output["id"] = "tweet_" + str(output["rawHTML"]["id"])
         difference = datetime.now() - output["pubDate"]
         maxdiff = 172800
-        output["priority"] = output["priority"] * ((maxdiff - difference.total_seconds())/maxdiff)^2
+        output["priority"] = output["priority"] * (maxdiff - difference.total_seconds()) * (maxdiff - difference.total_seconds())/(maxdiff * maxdiff)
         print "Dataminr event at " + str(output["pubDate"]) + ", priority " + str(output["priority"])
         update_articles(output, client)
 
