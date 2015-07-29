@@ -247,7 +247,7 @@ def process_reuters_articles(reuters_articles, client):
             output["priority"] = output["priority"] + 1
         if is_a_in_b(terrorism_words,output["topics"]):
             output["priority"] = output["priority"] + 2
-        output["priority"] = 2 * float(output["priority"] / article['newsMessage']['itemSet']['newsItem']['contentMeta']['urgency'])
+        output["priority"] = 2 * output["priority"] / float(article['newsMessage']['itemSet']['newsItem']['contentMeta']['urgency'])
         output["priority"] = adjust_priority_by_time(output["priority"], output["pubDate"])
         output["priority"] = output["priority"] * REUTERS_MULTIPLIER
         print "Reuters event at " + str(output["pubDate"]) + ", priority " + str(output["priority"])
