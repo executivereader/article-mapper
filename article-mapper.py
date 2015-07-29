@@ -4,8 +4,8 @@ from time import sleep
 
 MIN_PRIORITY = 3
 DATAMINR_MULTIPLIER = 1
-NEWS_MULTIPLIER = 1
-REUTERS_MULTIPLIER = 1
+NEWS_MULTIPLIER = 2
+REUTERS_MULTIPLIER = 2
 RECORDEDFUTURE_MULTIPLIER = 1
 MAXDIFF = 172800
 
@@ -209,7 +209,7 @@ def process_reuters_articles(reuters_articles, client):
         output["poster"] = ""
         output["movies"] = ""
         output["images"] = ""
-        output["title"] = article['newsMessage']['itemSet']['newsItem']['contentMeta']['slugline']
+        output["title"] = article['newsMessage']['itemSet']['newsItem']['contentMeta']['headline']
         output["content"] = u""
         if article['newsMessage']['itemSet']['newsItem']['contentSet']['inlineXML']['html']['body']['p'] is not None:
             for paragraph in article['newsMessage']['itemSet']['newsItem']['contentSet']['inlineXML']['html']['body']['p']:
