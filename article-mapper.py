@@ -117,7 +117,7 @@ def process_dataminr_events(raw_events, client):
         maxdiff = 172800.0
         output["priority"] = output["priority"] * (maxdiff - difference.total_seconds())/maxdiff
         print "Dataminr event at " + str(output["pubDate"]) + ", priority " + str(output["priority"])
-        update_articles(output)
+        update_articles(output, client)
 
 def is_a_in_b(a,b):
     for element in a:
