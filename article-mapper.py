@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from update_replica_set import start_mongo_client
 from datetime import datetime
 from time import sleep
 
@@ -182,17 +182,14 @@ def process_news_events(news_events):
         print "News event at " + str(output["pubDate"]) + ", priority " + str(output["priority"])
         update_articles(output)
 
-
-client = MongoClient("mongodb://52.0.247.177:27017,52.4.92.200:27017,54.152.196.59:27017")
-
-while 1:
-    raw_events = client.dataminr.events.find().sort("eventTime", -1).limit(10000)
-    news_events = client.raw_articles.news.find({"pubDate": {"$ne": "None"}}).sort("pubDate", -1).limit(2000)
-    print "Processing Dataminr articles"
-    process_dataminr_events(raw_events)
-    print "Processing news articles"
-    process_news_events(news_events)
-
-    client.production.articles.delete_many({"priority": {"$lt": 1} })
-
-    sleep(5)
+if __name__ == "__main__":
+    client = start_mongo_client()
+    while 1:
+        raw_events = client.dataminr.events.find().sort("eventTime", -1).limit(10000)
+        news_events = client.raw_articles.news.find({"pubDate": {"$ne": "None"}}).sort("pubDate", -1).limit(2000)
+        print "Processing Dataminr articles"
+        process_dataminr_events(raw_events)
+        print "Processing news articles"
+        process_news_events(news_events)
+        client.production.articles.delete_many({"priority": {"$lt": 1} })
+        sleep(5)
