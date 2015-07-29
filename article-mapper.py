@@ -200,16 +200,20 @@ def process_news_events(news_events, client):
         update_articles(output, client)
 
 def process_reuters_articles(reuters_articles, client):
-    print "blargh"
+    for article in reuters_articles:
+        print article['newsMessage']['itemSet']['newsItem']['versionCreated']
 
 if __name__ == "__main__":
     client = start_mongo_client()
     while 1:
         raw_events = client.dataminr.articles.find().sort("eventTime", -1).limit(10000)
         news_events = client.raw_articles.news.find({"pubDate": {"$ne": "None"}}).sort("pubDate", -1).limit(2000)
+        reuters_events = client.tr.articles.find().sort("newsMessage.itemSet.newsItem.versionCreated", -1).limit(10000)
         print "Processing Dataminr articles"
         process_dataminr_events(raw_events, client)
         print "Processing news articles"
         process_news_events(news_events, client)
+        print "Processing Reuters articles"
+        process_reuters_articles(reuters_events, client)
         client.production.articles.delete_many({"priority": {"$lt": MIN_PRIORITY} })
         sleep(5)
