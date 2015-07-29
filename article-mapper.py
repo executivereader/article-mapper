@@ -69,7 +69,7 @@ def process_dataminr_events(raw_events, client):
         if "Disasters & Weather - Natural Disasters" in output["topics"]:
             output["priority"] = output["priority"] + 1
         if "Transportation - Traffic & Roadways" in output["topics"]:
-            output["priority"] = output["priority"] - 20
+            output["priority"] = output["priority"] - 10
         output["geos"] = []
         if "eventLocation" in event.keys():
             if "coordinates" in event["eventLocation"].keys():
@@ -88,7 +88,7 @@ def process_dataminr_events(raw_events, client):
                                  }
                                }
                              }).count() > 0:
-                    output["priority"] = output["priority"] + 1
+                    output["priority"] = output["priority"] + 10
                 if client.locations.embassies.find({
                              "coords": {
                                "$near": {
@@ -100,13 +100,13 @@ def process_dataminr_events(raw_events, client):
                                  }
                                }
                              }).count() > 0:
-                    output["priority"] = output["priority"] + 5
+                    output["priority"] = output["priority"] + 20
                     if "Crime - Criminal Activity" in output["topics"]:
-                        output["priority"] = output["priority"] + 5
+                        output["priority"] = output["priority"] + 10
                     if "Conflicts & Violence" in output["topics"]:
-                        output["priority"] = output["priority"] + 10
+                        output["priority"] = output["priority"] + 30
                     if "Riots & Protests" in output["topics"]:
-                        output["priority"] = output["priority"] + 10
+                        output["priority"] = output["priority"] + 30
                     if "Disasters & Weather - Natural Disasters" in output["topics"]:
                         output["priority"] = output["priority"] + 5
         output["saved"] = "false"
