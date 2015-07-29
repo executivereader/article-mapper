@@ -203,7 +203,7 @@ def process_reuters_articles(reuters_articles, client):
     for article in reuters_articles:
         output = {}
         output["priority"] = 0
-        output["pubDate"] = datetime.strptime(article['newsMessage']['itemSet']['newsItem']['itemMeta']['versionCreated'], "%Y-%m-%dT%H:%M:%SZ")
+        output["pubDate"] = datetime.strptime(article['newsMessage']['itemSet']['newsItem']['itemMeta']['versionCreated'], "%Y-%m-%dT%H:%M:%S.000Z")
         print output["pubDate"]
         
 
